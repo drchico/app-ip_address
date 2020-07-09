@@ -24,56 +24,51 @@ const { getIpv4MappedIpv6Address } = require(path.join(__dirname, 'ipv6.js'));
 */
 const IPCIDR = require('ip-cidr');
 
-
-
-
-
-
 class IpAddress {
-  constructor() {
+    constructor() {
     // IAP's global log object is used to output errors, warnings, and other
     // information to the console, IAP's log files, or a Syslog server.
     // For more information, consult the Log Class guide on the Itential
     // Developer Hub https://developer.itential.io/ located
     // under Documentation -> Developer Guides -> Log Class Guide
     log.info('Starting the IpAddress product.');
-  }
+    }
 
-  /**
- * Calculate and return the first host IP address from a CIDR subnet.
- * @param {string} cidrStr - The IPv4 subnet expressed
- *                 in CIDR format.
- * @param {callback} callback - A callback function.
- * @return {string} (firstIpAddress,v6mappedIpAddress)  - An IPv4 address.
- *
- *
- *
- */
- getFirstIpAddress(cidrStr, callback) {
+    /**
+    * Calculate and return the first host IP address from a CIDR subnet.
+    * @param {string} cidrStr - The IPv4 subnet expressed
+    *                 in CIDR format.
+    * @param {callback} callback - A callback function.
+    * @return {string} (firstIpAddress,v6mappedIpAddress)  - An IPv4 address.
+    *
+    *
+    *
+  */
+    getFirstIpAddress(cidrStr, callback) {
 
-  let firstIpAddress = {
+    let firstIpAddress = {
       ipv4: null,
       ipv6: null
-  };
-  let callbackError = null;
+    };
+    let callbackError = null;
 
-  const cidr = new IPCIDR(cidrStr);
-  // Initialize options for the toArray() method.
-  // We want an offset of one and a limit of one.
-  // This returns an array with a single element, the first host address from the subnet.
-  const options = {
-    from: 1,
-    limit: 1
-  };
+    const cidr = new IPCIDR(cidrStr);
+    // Initialize options for the toArray() method.
+    // We want an offset of one and a limit of one.
+    // This returns an array with a single element, the first host address from the subnet.
+    const options = {
+        from: 1,
+        limit: 1
+    };
 
-  if (!cidr.isValid()) {
-    callbackError = 'Error: Invalid CIDR passed to getFirstIpAddress.';
-  } else {
-    [firstIpAddress.ipv4] = cidr.toArray(options);
-    firstIpAddress.ipv6 = getIpv4MappedIpv6Address(firstIpAddress.ipv4);
-  }
- return callback(firstIpAddress, v6mappedIpAddress, callbackError);
-}
+    if (!cidr.isValid()) {
+        callbackError = 'Error: Invalid CIDR passed to getFirstIpAddress.';
+    } else {
+        [firstIpAddress.ipv4] = cidr.toArray(options);
+        firstIpAddress.ipv6 = getIpv4MappedIpv6Address(firstIpAddress.ipv4);
+    }
+    return callback(firstIpAddress, callbackError);
+    }
 
 }
 
